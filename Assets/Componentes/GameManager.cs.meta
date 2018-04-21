@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5802847b87b5ebf4a8a5b7b3bef76393
+timeCreated: 1520351213
+licenseType: Pro
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - normal: {fileID: 1567651577809144, guid: bc526172dd2222f4f915c677d955d072, type: 2}
+  - embarrada: {fileID: 1044396000385092, guid: 2bea1aea0ef1ef6468bcd4d981e11f08,
+      type: 2}
+  - bloqueada: {fileID: 1453765345910126, guid: 476788cb98c57fb43b7ae0770ceb1ec5,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
