@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour {
     public GameObject aliado;
     public GameObject zombi;
 
+    
+
     public GameObject ButtonReiniciar;
     public GameObject ButtonComenzar;
 
@@ -89,17 +91,17 @@ public class GameManager : MonoBehaviour {
             tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = true;
             heroe.transform.position = new Vector2(casillaPulsada.transform.position.x, casillaPulsada.transform.position.y);
             posHeroe = new Vector2Int((int)casillaPulsada.transform.position.x, (int)casillaPulsada.transform.position.y);
+            aliado.name = "Heroe_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0)));
             Instantiate(heroe);
             heroeNoColocado = true;
         }
 
         else
         {
-            Debug.Log(1);
             // Si no hay aliado colocado en esa casilla
-            if (!tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado)
+            if (!tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado &&
+                !tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi)
             {
-                Debug.Log(2);
                 tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                 tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = true;
                 aliado.transform.position = new Vector2(casillaPulsada.transform.position.x, casillaPulsada.transform.position.y);
@@ -109,12 +111,11 @@ public class GameManager : MonoBehaviour {
 
             else
             {
-                Debug.Log(3);
                 // Si no hay zombi colocado en esa casilla
                 if (!tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi)
                 {
-                    aliado = GameObject.Find("Aliado_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0))) + "(Clone)");
-                    DestroyObject(aliado);
+                    GameObject aliade = GameObject.Find("Aliado_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0))) + "(Clone)");
+                    Destroy(aliade);
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi = true;
@@ -127,13 +128,12 @@ public class GameManager : MonoBehaviour {
                 // Si habia zombi, vaciamos la casilla
                 else
                 {
-                    zombi = GameObject.Find("Zombi_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0))) + "(Clone)");
-                    DestroyObject(zombi);
+                    GameObject zombie = GameObject.Find("Zombi_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0))) + "(Clone)");
+                    DestroyObject(zombie);
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].numZumbis = 0;
-                    Debug.Log(4);
                 }
             }
 
