@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
+    public int puntuacion = 0;  // +1 por zombi muerto (ó +5 si lo mató el héroe)                                // ○ -10 por aliado muerto (ó -50 si muere el héroe)
+    bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
+
     struct PersonajeCasilla {
         public bool hayRefugio;
         public bool hayHeroe;
@@ -33,15 +36,19 @@ public class GameManager : MonoBehaviour {
 
     public GameObject ButtonReiniciar;
     public GameObject ButtonComenzar;
+    public Text textPuntuacion;
 
     bool heroeNoColocado = false;
-    bool colocarCadaver = false;
 
 	Vector2Int posHeroe;
     Vector2Int posRefugio;
 
+    public bool deDia = true;
+
 	// Use this for initialization
 	void Start () {
+        ButtonComenzar.SetActive(false);
+        ButtonReiniciar.SetActive(false);
 		instance = this;
 		CreaTablero ();
 		PonComisaria ();
@@ -49,9 +56,13 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+        // Si pulsamos click derecho, cambiamos entre de dia y de noche
+        if (Input.GetMouseButtonDown(1))
+            deDia = !deDia;
+        textPuntuacion.text = "Puntos: " + puntuacion;
     }
-    
+
+
 	void CreaTablero() {
 		int y = 0;
 		for(int filas = 0; filas < tablero.GetLength(0); ++filas) {
@@ -65,11 +76,14 @@ public class GameManager : MonoBehaviour {
                 tablero[filas, columnas].hayZombi = false;
                 tablero[filas, columnas].numZumbis = 0;
 
-                suelo.transform.position = new Vector2(columnas, y);
+                suelo.transform.position = new Vector3(columnas, y, 0);
                 Instantiate (suelo, this.transform);
+                
 			}
 			y = -filas - 1;
 		}
+
+        
 	}
 
 	void PonComisaria() {
@@ -77,19 +91,55 @@ public class GameManager : MonoBehaviour {
 		int randomColumna = Random.Range (0, 10/2);
 
         tablero[randomFila, randomColumna].hayRefugio = true;
-        refugio.transform.position = new Vector2(randomColumna, -randomFila);
+        refugio.transform.position = new Vector3(randomColumna, -randomFila, 0);
 		posRefugio = new Vector2Int(randomColumna, -randomFila);
 		Instantiate(refugio, this.transform);
     }
 
 	
 
-	
+	public void ComienzaLaPartida() {
+        for (int filas = 0; filas < tablero.GetLength(0); ++filas)
+        {
+            for (int columnas = 0; columnas < tablero.GetLength(1); ++columnas)
+            {
+                GameObject casilla = GameObject.Find("Casilla_" + (filas + (columnas * tablero.GetLongLength(0))) + "(Clone)");
+                casilla.GetComponent<BoxCollider2D>().enabled = false;
 
-    public void OnButtonReiniciarClick() { }
+            }
+        }
+    }
+
+    public void OnButtonReiniciarClick() {
+        for (int filas = 0; filas < tablero.GetLength(0); ++filas)
+        {
+            for (int columnas = 0; columnas < tablero.GetLength(1); ++columnas)
+            {
+                GameObject casilla = GameObject.Find("Casilla_" + (filas + (columnas * tablero.GetLongLength(0))) + "(Clone)");
+                casilla.GetComponent<BoxCollider2D>().enabled = true;
+
+                tablero[filas, columnas].hayRefugio = false;
+                tablero[filas, columnas].hayAliado = false;
+                tablero[filas, columnas].hayHeroe = false;
+                tablero[filas, columnas].hayZombi = false;
+                tablero[filas, columnas].numZumbis = 0;
+
+                GameObject heroee = GameObject.Find("Heroe(Clone)");
+                DestroyObject(heroee);
+
+                GameObject aliade = GameObject.Find("Aliado_" + (filas + (columnas * tablero.GetLongLength(0))) + "(Clone)");
+                DestroyObject(aliade);
+
+                GameObject zombie = GameObject.Find("Zombi_" + (filas + (columnas * tablero.GetLongLength(0))) + "(Clone)");
+                DestroyObject(zombie);
+
+            }
+        }
+    }
 
     public void OnClick(GameObject casillaPulsada)
     {
+       
         if (!heroeNoColocado)
         {
             tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = true;
@@ -98,6 +148,9 @@ public class GameManager : MonoBehaviour {
             aliado.name = "Heroe_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0)));
             Instantiate(heroe);
             heroeNoColocado = true;
+            ButtonComenzar.SetActive(true);
+            ButtonReiniciar.SetActive(true);
+
         }
 
         else
@@ -122,7 +175,8 @@ public class GameManager : MonoBehaviour {
                 {
                     GameObject aliade = GameObject.Find("Aliado_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0))) + "(Clone)");
                     Destroy(aliade);
-                    num_aliados--;
+                    if (tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado) num_aliados--;
+
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi = true;
@@ -138,7 +192,7 @@ public class GameManager : MonoBehaviour {
                 {
                     GameObject zombie = GameObject.Find("Zombi_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0))) + "(Clone)");
                     DestroyObject(zombie);
-                    num_zombis--;
+                    if (tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi) num_zombis--;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi = false;

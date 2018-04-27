@@ -11,6 +11,18 @@ public class DiaNoche : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        this.gameObject.transform.Rotate(0,.5f,0);
+        if (GameManager.instance.deDia)
+        {
+            var rotationVector = transform.rotation.eulerAngles;
+            rotationVector.y = 0;
+            this.gameObject.transform.rotation = Quaternion.Euler(rotationVector);
+        }
+
+        else
+        {
+            var rotationVector = transform.rotation.eulerAngles;
+            rotationVector.y = 180;
+            this.gameObject.transform.rotation = Quaternion.Euler(rotationVector);
+        }
 	}
 }
