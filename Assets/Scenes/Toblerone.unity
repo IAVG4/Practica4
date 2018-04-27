@@ -608,8 +608,12 @@ MonoBehaviour:
   suelo: {fileID: 1380670881463224, guid: 6dc5182cf81c4514080b360a06cf3cf1, type: 2}
   refugio: {fileID: 1480718960872594, guid: e71840951b8251947a4b4d522fc1b0ac, type: 2}
   heroe: {fileID: 1928235278376792, guid: e2158c12d0276034a9413f1587b12b6a, type: 2}
-  aliado: {fileID: 1006674529536494, guid: 65708c41a34faf2478c231e486a3ea9e, type: 2}
+  aliado: {fileID: 1623325205319620, guid: 65708c41a34faf2478c231e486a3ea9e, type: 2}
+  listaAliados: []
   zombi: {fileID: 1770694799682866, guid: 411e23523c14ecc44acd0c9be83219bd, type: 2}
+  listaZombis: []
+  num_aliados: 0
+  num_zombis: 0
   ButtonReiniciar: {fileID: 1445781116}
   ButtonComenzar: {fileID: 1268047590}
   textPuntuacion: {fileID: 1906243502}

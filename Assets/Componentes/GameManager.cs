@@ -9,10 +9,12 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
-    public int puntuacion = 0;  // +1 por zombi muerto (ó +5 si lo mató el héroe)                                // ○ -10 por aliado muerto (ó -50 si muere el héroe)
-    bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
+    public int puntuacion = 0;  // +1 por zombi muerto (ó +5 si lo mató el héroe)
+                                // ○ -10 por aliado muerto (ó -50 si muere el héroe)
+    bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
 
-    struct PersonajeCasilla {
+
+    public struct PersonajeCasilla {
         public bool hayRefugio;
         public bool hayHeroe;
         public bool hayAliado;
@@ -20,19 +22,23 @@ public class GameManager : MonoBehaviour {
         public int numZumbis;
     };
 
-    PersonajeCasilla[,] tablero = new PersonajeCasilla[5,10];
+    public PersonajeCasilla[,] tablero = new PersonajeCasilla[5,10];
 
 	public GameObject suelo;
     public GameObject refugio;
     public GameObject heroe;
+
     public GameObject aliado;
+    public List<Aliado> listaAliados;
+
     public GameObject zombi;
+    public List<MoveZombi> listaZombis;
 
     const int MAX_ALIADOS = 5;
     const int MAX_ZOMBIS = 20;
 
-    int num_aliados = 0;
-    int num_zombis = 0;
+    public int num_aliados = 0;
+    public int num_zombis = 0;
 
     public GameObject ButtonReiniciar;
     public GameObject ButtonComenzar;
@@ -145,7 +151,6 @@ public class GameManager : MonoBehaviour {
             tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = true;
             heroe.transform.position = new Vector2(casillaPulsada.transform.position.x, casillaPulsada.transform.position.y);
             posHeroe = new Vector2Int((int)casillaPulsada.transform.position.x, (int)casillaPulsada.transform.position.y);
-            aliado.name = "Heroe_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0)));
             Instantiate(heroe);
             heroeNoColocado = true;
             ButtonComenzar.SetActive(true);
@@ -163,9 +168,11 @@ public class GameManager : MonoBehaviour {
                 tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                 tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = true;
                 aliado.transform.position = new Vector2(casillaPulsada.transform.position.x, casillaPulsada.transform.position.y);
-                aliado.name = "Aliado_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0)));
-                Instantiate(aliado);
                 num_aliados++;
+                Aliado comAliado = aliado.GetComponent<Aliado>();
+                comAliado.ConstructoraAliado((Vector2)aliado.transform.position, num_aliados);
+                listaAliados.Add(comAliado);
+                Instantiate(aliado);
             }
 
             else
@@ -173,18 +180,25 @@ public class GameManager : MonoBehaviour {
                 // Si no hay zombi colocado en esa casilla
                 if (!tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi && num_zombis < MAX_ZOMBIS)
                 {
-                    GameObject aliade = GameObject.Find("Aliado_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0))) + "(Clone)");
-                    Destroy(aliade);
-                    if (tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado) num_aliados--;
+                    for (int i = 0; i < listaAliados.Count; i++)
+                    {
+                        if (listaAliados[i].getPosicion() == (Vector2)casillaPulsada.transform.position)
+                        {
+                            GameObject aliade = listaAliados[i].gameObject;
+                            listaAliados.RemoveAt(i);
+                            num_aliados--;
+                            Destroy(aliade);
+                        }
+                    }
 
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi = true;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].numZumbis = 1;
                     zombi.transform.position = new Vector2(casillaPulsada.transform.position.x, casillaPulsada.transform.position.y);
-                    zombi.name = "Zombi_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0)));
-                    Instantiate(zombi);
                     num_zombis++;
+                    Instantiate(zombi);
+                    
                 }
 
                 // Si habia zombi, vaciamos la casilla
