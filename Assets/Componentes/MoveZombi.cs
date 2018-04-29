@@ -9,6 +9,7 @@ public class MoveZombi : MonoBehaviour {
 
     Vector2 _posicion;
     int _id;
+
     public void ConstructoraZombi(Vector2 posicion, int id)
     {
         _posicion = posicion;

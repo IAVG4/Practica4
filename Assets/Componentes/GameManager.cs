@@ -9,8 +9,10 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
-    public int puntuacion = 0;  // +1 por zombi muerto (ó +5 si lo mató el héroe)                                // ○ -10 por aliado muerto (ó -50 si muere el héroe)
-    bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
+    public int puntuacion = 0;  // +1 por zombi muerto (ó +5 si lo mató el héroe)
+                                // ○ -10 por aliado muerto (ó -50 si muere el héroe)
+    bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
+
 
     struct PersonajeCasilla {
         public bool hayRefugio;
@@ -25,8 +27,12 @@ public class GameManager : MonoBehaviour {
 	public GameObject suelo;
     public GameObject refugio;
     public GameObject heroe;
+
     public GameObject aliado;
+    public List<GameObject> listaAliados;
+
     public GameObject zombi;
+    
 
     const int MAX_ALIADOS = 5;
     const int MAX_ZOMBIS = 20;
@@ -126,6 +132,7 @@ public class GameManager : MonoBehaviour {
 
                 GameObject heroee = GameObject.Find("Heroe(Clone)");
                 DestroyObject(heroee);
+                heroeNoColocado = false;
 
                 GameObject aliade = GameObject.Find("Aliado_" + (filas + (columnas * tablero.GetLongLength(0))) + "(Clone)");
                 DestroyObject(aliade);
@@ -135,6 +142,8 @@ public class GameManager : MonoBehaviour {
 
             }
         }
+        ButtonComenzar.SetActive(false);
+        ButtonReiniciar.SetActive(false);
     }
 
     public void OnClick(GameObject casillaPulsada)
@@ -162,10 +171,20 @@ public class GameManager : MonoBehaviour {
             {
                 tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                 tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = true;
-                aliado.transform.position = new Vector2(casillaPulsada.transform.position.x, casillaPulsada.transform.position.y);
-                aliado.name = "Aliado_" + ((int)-casillaPulsada.transform.position.y + ((int)casillaPulsada.transform.position.x * tablero.GetLongLength(0)));
-                Instantiate(aliado);
+
                 num_aliados++;
+                
+                aliado.transform.position = new Vector2(casillaPulsada.transform.position.x, casillaPulsada.transform.position.y);
+                aliado.name = "Aliado_" + num_aliados;
+
+                aliado.GetComponent<Aliado>().ConstructoraAliado((Vector2)aliado.transform.position, num_aliados);
+
+                GameObject CopiaAliado = Instantiate(aliado);
+
+                listaAliados.Add(CopiaAliado);
+
+                
+                
             }
 
             else
