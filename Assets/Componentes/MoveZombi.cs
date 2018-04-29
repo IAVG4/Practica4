@@ -36,11 +36,12 @@ public class MoveZombi : MonoBehaviour {
 		
 	}
 
-    public IEnumerator movimientoZombi()
+    public IEnumerator MovimientoZombi()
     {
-        for (int i = 0; i < GameManager.instance.listaAliados.Count; i++)
+        //for (int i = 0; i < GameManager.instance.listaAliados.Count; i++)
         {
             this.gameObject.transform.Translate(new Vector3(-1, 0, 0));
+            _posicion = new Vector2(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
         }
         yield return new WaitForSeconds(0.5f);
     }

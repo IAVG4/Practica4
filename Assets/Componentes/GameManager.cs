@@ -65,9 +65,24 @@ public class GameManager : MonoBehaviour {
         // Si pulsamos click derecho, cambiamos entre de dia y de noche
         if (Input.GetMouseButtonDown(1))
             deDia = !deDia;
+
+        
+
         textPuntuacion.text = "Puntos: " + puntuacion;
     }
 
+    void TurnoZombis()
+    {
+        for (int i = 0; i < listaZombis.Count; i++)
+        {
+            GameObject zombiDestruido = listaZombis[i];
+
+            tablero[(int)-zombiDestruido.transform.position.y, (int)zombiDestruido.transform.position.x].hayAliado = false;
+            tablero[(int)-zombiDestruido.transform.position.y, (int)zombiDestruido.transform.position.x].numZumbis--;
+
+            Invoke("MovimientoZombi", 0.5f);
+        }
+    }
 
 	void CreaTablero() {
 		int y = 0;
@@ -112,6 +127,8 @@ public class GameManager : MonoBehaviour {
 
             }
         }
+
+        TurnoZombis();
     }
 
     public void OnButtonReiniciarClick() {
@@ -202,8 +219,10 @@ public class GameManager : MonoBehaviour {
 
             else
             {
+                
                 // Si no hay zombi colocado en esa casilla
-                if (!tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi && num_zombis < MAX_ZOMBIS)
+                if (!tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi && 
+                    num_zombis < MAX_ZOMBIS)
                 {
                     for (int i = 0; i < listaAliados.Count; i++)
                     {
@@ -232,7 +251,7 @@ public class GameManager : MonoBehaviour {
                     zombi.name = "Zombi_" + num_zombis;
 
                     GameObject CopiaZombi = Instantiate(zombi);
-                    CopiaZombi.GetComponent<MoveZombi>().ConstructoraZombi((Vector2)aliado.transform.position, num_aliados);
+                    CopiaZombi.GetComponent<MoveZombi>().ConstructoraZombi((Vector2)zombi.transform.position, num_zombis);
 
                     listaZombis.Add(CopiaZombi);
                 }
