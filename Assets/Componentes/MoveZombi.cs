@@ -35,12 +35,12 @@ public class MoveZombi : MonoBehaviour {
 		
 	}
 
-    IEnumerator movimientoZombi()
-    {
-        for (int i = 0; i < GameManager.instance.listaAliados.Count; i++)
-        {
-
-        }
-        yield return new WaitForSeconds(0.5f);
-    }
+    // IEnumerator movimientoZombi()
+    // {
+    //     for (int i = 0; i < GameManager.instance.listaAliados.Count; i++)
+    //     {
+    // 
+    //     }
+    //     yield return new WaitForSeconds(0.5f);
+    // }
 }
