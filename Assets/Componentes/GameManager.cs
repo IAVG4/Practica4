@@ -75,12 +75,13 @@ public class GameManager : MonoBehaviour {
     {
         for (int i = 0; i < listaZombis.Count; i++)
         {
-            GameObject zombiDestruido = listaZombis[i];
+            GameObject zombiAt = listaZombis[i];
 
-            tablero[(int)-zombiDestruido.transform.position.y, (int)zombiDestruido.transform.position.x].hayAliado = false;
-            tablero[(int)-zombiDestruido.transform.position.y, (int)zombiDestruido.transform.position.x].numZumbis--;
+            tablero[(int)-zombiAt.transform.position.y, (int)zombiAt.transform.position.x].numZumbis--;
+            if (tablero[(int)-zombiAt.transform.position.y, (int)zombiAt.transform.position.x].numZumbis == 0)
+                tablero[(int)-zombiAt.transform.position.y, (int)zombiAt.transform.position.x].hayZombi = false;
 
-            Invoke("MovimientoZombi", 0.5f);
+            zombiAt.GetComponent<MoveZombi>().InvokeMovimientoZombi();
         }
     }
 
@@ -275,7 +276,6 @@ public class GameManager : MonoBehaviour {
                             listaZombis[i].name = "Zombi_" + (i + 1);
                     }
                     
-                    if (tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi) num_zombis--;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayHeroe = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayAliado = false;
                     tablero[(int)-casillaPulsada.transform.position.y, (int)casillaPulsada.transform.position.x].hayZombi = false;

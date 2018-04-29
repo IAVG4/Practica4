@@ -36,13 +36,21 @@ public class MoveZombi : MonoBehaviour {
 		
 	}
 
+    public void InvokeMovimientoZombi()
+    {
+        Debug.Log("He entrado en el Inoke");
+        StartCoroutine("MovimientoZombi", 0.5f);
+    }
+
     public IEnumerator MovimientoZombi()
     {
         //for (int i = 0; i < GameManager.instance.listaAliados.Count; i++)
-        {
+        //{
+            Debug.Log(this.gameObject.transform.position);
             this.gameObject.transform.Translate(new Vector3(-1, 0, 0));
             _posicion = new Vector2(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
-        }
+            Debug.Log(this.gameObject.transform.position);
+        //}
         yield return new WaitForSeconds(0.5f);
     }
 }
