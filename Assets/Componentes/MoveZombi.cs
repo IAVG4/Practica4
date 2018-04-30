@@ -48,7 +48,6 @@ public class MoveZombi : MonoBehaviour {
             Vector3 AliadoMasCercano = GameManager.instance.listaAliados[0].transform.position;
             int distancia = (int)Mathf.Abs(this.gameObject.transform.position.x - AliadoMasCercano.x) + 
                 (int)Mathf.Abs(-this.gameObject.transform.position.y - (-AliadoMasCercano.y));
-            Debug.Log(distancia);
 
             for (int i = 1; i < GameManager.instance.listaAliados.Count; i++)
             {
@@ -62,7 +61,7 @@ public class MoveZombi : MonoBehaviour {
                     distancia = distAux;
                     AliadoMasCercano = GameManager.instance.listaAliados[1].transform.position;
                 }
-                Debug.Log(distancia + " " + i);
+                Debug.Log(i);
             }
 
             if (this.gameObject.transform.position.y == AliadoMasCercano.y)

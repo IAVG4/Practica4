@@ -156,7 +156,7 @@ public class GameManager : MonoBehaviour {
 
                         tablero[(int)-aliadoDestruido.transform.position.y, (int)aliadoDestruido.transform.position.x].hayAliado = false;
 
-                        listaAliados.RemoveAt(i);
+                        listaAliados.Remove(aliadoDestruido);
                         num_aliados--;
                         Destroy(aliadoDestruido);
                 }
@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour {
                         tablero[(int)-zombiDestruido.transform.position.y, (int)zombiDestruido.transform.position.x].hayAliado = false;
                         tablero[(int)-zombiDestruido.transform.position.y, (int)zombiDestruido.transform.position.x].numZumbis = 0;
 
-                        listaZombis.RemoveAt(i);
+                        listaZombis.Remove(zombiDestruido);
                         num_zombis--;
                         Destroy(zombiDestruido);          
                 }
@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour {
                         {
                             GameObject aliadoDestruido = listaAliados[i];
                             
-                            listaAliados.RemoveAt(i);
+                            listaAliados.Remove(aliadoDestruido);
                             num_aliados--;
                             Destroy(aliadoDestruido);
                         }
@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour {
                         {
                             GameObject zombiDestruido = listaZombis[i];
 
-                            listaZombis.RemoveAt(i);
+                            listaZombis.Remove(zombiDestruido);
                             num_zombis--;
                             Destroy(zombiDestruido);
                         }
