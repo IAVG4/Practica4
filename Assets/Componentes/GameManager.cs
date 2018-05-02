@@ -306,7 +306,26 @@ public class GameManager : MonoBehaviour {
 			Debug.Log (elem);
 	}
 
-	
-	
+	public List<Vector2> getZombies(){
+		List<Vector2> zombies = new List<Vector2> ();
+		for (int i = 0; i < listaZombis.Count; ++i)
+			zombies.Add (new Vector2 (-listaZombis [i].transform.position.y, listaZombis [i].transform.position.x));
+		
+			return zombies;
+	}
+	public Vector2 getRefugio(){
+		return new Vector2 ((int)-refugio.transform.position.y, (int)refugio.transform.position.x);
+	}
+
+	public int getNumZombies(){
+		return num_zombis;
+	}
+
+	public int getNumAliados(){
+		return num_aliados;
+	}
+	public bool esDeDia(){
+		return deDia;
+	}
 }
 	
