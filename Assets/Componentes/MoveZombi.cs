@@ -108,7 +108,7 @@ public class MoveZombi : MonoBehaviour
                 {
                     int num = Random.Range(0, 100);
                     GameObject soldadoMuerto = GameManager.instance.listaAliados[aliadoTarget];
-                    GameObject heroeMuerto = GameManager.instance.heroe;
+                    GameObject heroeMuerto = GameObject.Find("Heroe(Clone)");
                     bool deDia = GameManager.instance.esDeDia();
                     if (deDia)
                     {
