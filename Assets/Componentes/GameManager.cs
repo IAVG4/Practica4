@@ -4,23 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public class GameManager : MonoBehaviour {
+public struct PersonajeCasilla {
+	public bool hayRefugio;
+	public bool hayHeroe;
+	public bool hayAliado;
+	public bool hayZombi;
+	public int numZumbis;
+};
 
+public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
     public int puntuacion = 0;  // +1 por zombi muerto (ó +5 si lo mató el héroe)
                                 // ○ -10 por aliado muerto (ó -50 si muere el héroe)
     bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
-
-
-    struct PersonajeCasilla {
-        public bool hayRefugio;
-        public bool hayHeroe;
-        public bool hayAliado;
-        public bool hayZombi;
-        public int numZumbis;
-    };
 
     PersonajeCasilla[,] tablero = new PersonajeCasilla[5,10];
 
@@ -326,6 +324,10 @@ public class GameManager : MonoBehaviour {
 	}
 	public bool esDeDia(){
 		return deDia;
+	}
+
+	public PersonajeCasilla getPersonaje(Vector2 pos){
+		return tablero [(int)-pos.y, (int)pos.x];
 	}
 }
 	

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 61618907275490320}
   - component: {fileID: 114527666913641154}
   m_Layer: 0
-  m_Name: Suelo
+  m_Name: Casilla_49
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
