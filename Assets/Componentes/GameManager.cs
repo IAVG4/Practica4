@@ -20,11 +20,12 @@ public class GameManager : MonoBehaviour {
                                 // ○ -10 por aliado muerto (ó -50 si muere el héroe)
     bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
 
-    PersonajeCasilla[,] tablero = new PersonajeCasilla[5,10];
+    public PersonajeCasilla[,] tablero = new PersonajeCasilla[5,10];
 
 	public GameObject suelo;
     public GameObject refugio;
     public GameObject heroe;
+	public GameObject copiaHeroe;
 
     public GameObject aliado;
     public List<GameObject> listaAliados;
@@ -69,6 +70,11 @@ public class GameManager : MonoBehaviour {
         textPuntuacion.text = "Puntos: " + puntuacion;
     }
 
+	void turnoHeroe(){
+		GameObject HeroeAt = copiaHeroe;
+		tablero[(int)-HeroeAt.transform.position.y, (int)HeroeAt.transform.position.x].hayHeroe = false;
+		HeroeAt.GetComponent<MoveHeroe> ().InvokeMovimientoHeroe ();
+	}
     void TurnoZombis()
     {
         for (int i = 0; i < listaZombis.Count; i++)
@@ -144,6 +150,7 @@ public class GameManager : MonoBehaviour {
             }
         }
 
+		turnoHeroe ();
         TurnoZombis();
     }
 
@@ -203,12 +210,16 @@ public class GameManager : MonoBehaviour {
             heroe.transform.position = new Vector2(casillaPulsada.transform.position.x, casillaPulsada.transform.position.y);
             posHeroe = new Vector2Int((int)casillaPulsada.transform.position.x, (int)casillaPulsada.transform.position.y);
             heroe.name = "Heroe";
-            Instantiate(heroe);
+            //Instantiate(heroe);
             heroeNoColocado = true;
             ButtonComenzar.SetActive(true);
             ButtonReiniciar.SetActive(true);
 
-        }
+			copiaHeroe = Instantiate(heroe);
+			//CopiaHeroe.SetActive (true);
+			copiaHeroe.GetComponent<MoveHeroe> ().ConstructoraHeroe ((Vector2)copiaHeroe.transform.position);
+			//heroe.GetComponent<MoveHeroe> ().ConstructoraHeroe ((Vector2)heroe.transform.position);
+		}
 
         else
         {

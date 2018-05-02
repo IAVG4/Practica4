@@ -7,20 +7,14 @@ public class MoveHeroe : MonoBehaviour {
 	public enum situacion {muchosZombies, muchosAliados, neutro}
 	public enum destreza {buena, regular, mala}
 	public enum decision {avanzar, retroceder, esperar}
+	decision myDecision;
 	Vector2 _posicion;
-	int _id;
 
-	public void ConstructoraZombi(Vector2 posicion, int id)
+	public void ConstructoraHeroe(Vector2 posicion)
 	{
-		_posicion = posicion;
-		_id = id;
+		_posicion = new Vector2(-posicion.y, posicion.x);
 	}
-
-	public int my_Id()
-	{
-		return _id;
-	}
-
+		
 	public Vector2 getPosicion()
 	{
 		return _posicion;
@@ -28,7 +22,6 @@ public class MoveHeroe : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
@@ -38,8 +31,10 @@ public class MoveHeroe : MonoBehaviour {
 
 	public void InvokeMovimientoHeroe()
 	{
-		decision d = makeDecision ();
-		StartCoroutine(MovimientoHeroe(d));
+		myDecision = makeDecision ();
+		Debug.Log (myDecision);
+		StartCoroutine("MovimientoHeroe", 0.5f);
+		//MovimientoHeroe();
 	}
 
 	decision makeDecision(){
@@ -81,7 +76,6 @@ public class MoveHeroe : MonoBehaviour {
 		else if (!deDia && numAliados > 1)
 			myDestreza = destreza.buena;
 
-		decision myDecision = decision.esperar;
 		if (mySituacion == situacion.muchosZombies) {
 			if (myDestreza == destreza.buena)
 				return decision.avanzar;
@@ -108,47 +102,84 @@ public class MoveHeroe : MonoBehaviour {
 		}
 	}	
 
-	public IEnumerator MovimientoHeroe(decision myDecision)
+	public IEnumerator MovimientoHeroe()
+	//public void MovimientoHeroe()
 	{
-		Vector2 target = new Vector2(_posicion.x, _posicion.y);
+		Vector3 target = new Vector3(0, 0, 0);
 		if (myDecision == decision.avanzar) {
-			List<Vector2> zombies = GameManager.instance.getZombies ();
-			target = zombies [0];
-			int distancia = Mathf.Abs (((int)zombies [0].x - (int)_posicion.x) + ((int)zombies [0].y - (int)_posicion.y));
+			int distancia = 1000;
+			if (GameManager.instance.listaZombis.Count > 0)
+			{
+				target = GameManager.instance.listaZombis[0].transform.position;
+				distancia = (int)Mathf.Abs(this.gameObject.transform.position.x - target.x) +
+					(int)Mathf.Abs(-this.gameObject.transform.position.y - (-target.y));
 
-			for (int i = 1; i < zombies.Count; i++) {
-				int distAux = Mathf.Abs (((int)zombies [i].x - (int)_posicion.x) + ((int)zombies [i].y - (int)_posicion.y));
+				for (int i = 1; i < GameManager.instance.listaZombis.Count; i++)
+				{
+					int distAux = (int)Mathf.Abs(this.gameObject.transform.position.x
+						- GameManager.instance.listaZombis[i].transform.position.x) +
+						(int)Mathf.Abs(-this.gameObject.transform.position.y
+							- (-GameManager.instance.listaZombis[i].transform.position.y));
 
+					if (distAux < distancia)
+					{
+						distancia = distAux;
+						target = GameManager.instance.listaZombis[i].transform.position;
+					}
 
-				if (distAux < distancia) {
-					distancia = distAux;
-					target = zombies [i];
 				}
-				Debug.Log (i);
 			}
 
 		} else if (myDecision == decision.retroceder) {
-			target = GameManager.instance.getRefugio ();
+			target = GameManager.instance.refugio.transform.position;
 		}
 
 		if (myDecision != decision.esperar) {
-			if (this.gameObject.transform.position.y == target.y) {
-				if (this.gameObject.transform.position.x > target.x) {
-					this.gameObject.transform.Translate (new Vector3 (-1, 0, 0));
-
-				} else if (this.gameObject.transform.position.x < target.x) {
-					this.gameObject.transform.Translate (new Vector3 (1, 0, 0));
+			if (this.gameObject.transform.position.y == target.y)
+			{
+				if (this.gameObject.transform.position.x > target.x)
+				{
+					this.gameObject.transform.Translate(new Vector3(-1, 0, 0));
 				}
-			} else {
-				if (this.gameObject.transform.position.y > target.y) {
-					this.gameObject.transform.Translate (new Vector3 (0, -1, 0));
 
-				} else {
-					this.gameObject.transform.Translate (new Vector3 (0, 0, 0));
+				else if (this.gameObject.transform.position.x < target.x)
+				{
+					this.gameObject.transform.Translate(new Vector3(1, 0, 0));
 				}
 			}
+			else if (this.gameObject.transform.position.x == target.x)
+			{
+				if (this.gameObject.transform.position.y > target.y)
+					this.gameObject.transform.Translate(new Vector3(0, -1, 0));
+				else
+					this.gameObject.transform.Translate(new Vector3(0, 1, 0));
+			}
+			else
+			{
+				if (Mathf.Abs(this.gameObject.transform.position.x - target.x) > 
+					Mathf.Abs(-this.gameObject.transform.position.y - (-target.y)))
+				{
+					if (this.gameObject.transform.position.y < target.y)
+					{
+						this.gameObject.transform.Translate(new Vector3(0, 1, 0));
+					}
+					else this.gameObject.transform.Translate(new Vector3(0, -1, 0));
+				}
 
-			_posicion = new Vector2 (this.gameObject.transform.position.x, this.gameObject.transform.position.y);
+				else
+				{
+					if (this.gameObject.transform.position.x < target.x)
+					{
+						this.gameObject.transform.Translate(new Vector3(1, 0, 0));
+					}
+					else this.gameObject.transform.Translate(new Vector3(-1, 0, 0));
+				}
+
+			}
+
+			_posicion = new Vector2 (-this.gameObject.transform.position.y, this.gameObject.transform.position.x);
+			Debug.Log (_posicion);
+			GameManager.instance.tablero [(int)_posicion.x, (int)_posicion.y].hayHeroe = true;
 		}
 
 		yield return new WaitForSeconds(0.5f);

@@ -85,7 +85,7 @@ public class MoveZombi : MonoBehaviour
         if (distToHeroe < distancia)
         {
             Debug.Log("target heroe");
-            AliadoMasCercano = GameManager.instance.heroe.transform.position;
+            AliadoMasCercano = GameManager.instance.copiaHeroe.transform.position;
         }
 
         if (this.gameObject.transform.position.y == AliadoMasCercano.y)
@@ -148,41 +148,38 @@ public class MoveZombi : MonoBehaviour
                 }
             }
         }
-        else
+		else if (this.gameObject.transform.position.x == AliadoMasCercano.x)
         {
             if (this.gameObject.transform.position.y > AliadoMasCercano.y)
-            {
                 this.gameObject.transform.Translate(new Vector3(0, -1, 0));
+			else
+				this.gameObject.transform.Translate(new Vector3(0, 1, 0));
+		}
+        else
+        {
+            if (Mathf.Abs(this.gameObject.transform.position.x - AliadoMasCercano.x) > 
+                Mathf.Abs(-this.gameObject.transform.position.y - (-AliadoMasCercano.y)))
+            {
+                if (this.gameObject.transform.position.y < AliadoMasCercano.y)
+                {
+                    this.gameObject.transform.Translate(new Vector3(0, 1, 0));
+                }
+                else this.gameObject.transform.Translate(new Vector3(0, -1, 0));
             }
 
             else
             {
-                if (Mathf.Abs(this.gameObject.transform.position.x - AliadoMasCercano.x) > 
-                    Mathf.Abs(-this.gameObject.transform.position.y - (-AliadoMasCercano.y)))
+                if (this.gameObject.transform.position.x < AliadoMasCercano.x)
                 {
-                    if (this.gameObject.transform.position.y < AliadoMasCercano.y)
-                    {
-                        this.gameObject.transform.Translate(new Vector3(0, 1, 0));
-                    }
-                    else this.gameObject.transform.Translate(new Vector3(0, -1, 0));
+                    this.gameObject.transform.Translate(new Vector3(1, 0, 0));
                 }
-
-                else
-                {
-                    if (this.gameObject.transform.position.x < AliadoMasCercano.x)
-                    {
-                        this.gameObject.transform.Translate(new Vector3(1, 0, 0));
-                    }
-                    else this.gameObject.transform.Translate(new Vector3(-1, 0, 0));
-                }
-                
+                else this.gameObject.transform.Translate(new Vector3(-1, 0, 0));
             }
+            
         }
+        
 
         _posicion = new Vector2(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
-
-
-
 
         yield return new WaitForSeconds(0.5f);
     }
