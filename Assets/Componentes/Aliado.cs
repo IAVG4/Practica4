@@ -29,4 +29,6 @@ public class Aliado : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    //IEnumerator 
 }

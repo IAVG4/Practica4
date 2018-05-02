@@ -35,8 +35,8 @@ public class GameManager : MonoBehaviour {
     const int MAX_ALIADOS = 5;
     const int MAX_ZOMBIS = 20;
 
-    int num_aliados = 0;
-    int num_zombis = 0;
+    public int num_aliados = 0;
+    public int num_zombis = 0;
 
     public GameObject ButtonReiniciar;
     public GameObject ButtonComenzar;
