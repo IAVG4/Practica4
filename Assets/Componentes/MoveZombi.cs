@@ -113,17 +113,36 @@ public class MoveZombi : MonoBehaviour
                     if (deDia)
                     {
 
-                        if (GameManager.instance.getNumAliados() >= 2 && num < 90) muerto = true;
-                        else if (GameManager.instance.getNumAliados() == 1 && num < 50) muerto = true;
-                        else if (GameManager.instance.getNumAliados() == 0 && num < 20) muerto = true;
+                        if (GameManager.instance.getNumAliados() >= 2 && num < 90) {
+                            if (pc.hayHeroe) GameManager.instance.puntuacion += 5;
+                            else GameManager.instance.puntuacion++;
+                            muerto = true;
+                        }
+                        else if (GameManager.instance.getNumAliados() == 1 && num < 50)
+                        {
+                            if (pc.hayHeroe) GameManager.instance.puntuacion += 5;
+                            else GameManager.instance.puntuacion++;
+                            muerto = true;
+                        }
+                        else if (GameManager.instance.getNumAliados() == 0 && num < 20)
+                        {
+                            if (pc.hayHeroe) GameManager.instance.puntuacion += 5;
+                            else GameManager.instance.puntuacion++;
+                            muerto = true;
+                        }
                         else
                         {
-                            if (pc.hayHeroe) DestroyObject(heroeMuerto);
+                            if (pc.hayHeroe)
+                            {
+                                GameManager.instance.puntuacion -= 50;
+                                DestroyObject(heroeMuerto);
+                            }
 
                             else
                             {
                                 GameManager.instance.listaAliados.Remove(GameManager.instance.listaAliados[aliadoTarget]);
                                 GameManager.instance.num_aliados--;
+                                GameManager.instance.puntuacion -= 10;
                                 DestroyObject(soldadoMuerto);
                             }
                         }
@@ -131,16 +150,37 @@ public class MoveZombi : MonoBehaviour
                     }
                     else
                     {
-                        if (GameManager.instance.getNumAliados() >= 2 && num < 80) muerto = true;
-                        else if (GameManager.instance.getNumAliados() == 1 && num < 40) muerto = true;
-                        else if (GameManager.instance.getNumAliados() == 0 && num < 10) muerto = true;
+                        if (GameManager.instance.getNumAliados() >= 2 && num < 80)
+                        {
+                            if (pc.hayHeroe) GameManager.instance.puntuacion += 5;
+                            else GameManager.instance.puntuacion++;
+                            muerto = true;
+                        }
+                        else if (GameManager.instance.getNumAliados() == 1 && num < 40)
+                        {
+                            if (pc.hayHeroe) GameManager.instance.puntuacion += 5;
+                            else GameManager.instance.puntuacion++;
+                            muerto = true;
+                        }
+                        else if (GameManager.instance.getNumAliados() == 0 && num < 10)
+                        {
+                            if (pc.hayHeroe) GameManager.instance.puntuacion += 5;
+                            else GameManager.instance.puntuacion++;
+                            muerto = true;
+                        }
                         else
                         {
-                            if (pc.hayHeroe) DestroyObject(heroeMuerto);
+                            if (pc.hayHeroe)
+                            {
+                                GameManager.instance.puntuacion -= 50;
+                                DestroyObject(heroeMuerto);
+                            }
 
-                            else {
+                            else
+                            {
                                 GameManager.instance.listaAliados.Remove(GameManager.instance.listaAliados[aliadoTarget]);
                                 GameManager.instance.num_aliados--;
+                                GameManager.instance.puntuacion -= 10;
                                 DestroyObject(soldadoMuerto);
                             }
                         }
