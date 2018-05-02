@@ -80,6 +80,24 @@ public class GameManager : MonoBehaviour {
                 tablero[(int)-zombiAt.transform.position.y, (int)zombiAt.transform.position.x].hayZombi = false;
 
             zombiAt.GetComponent<MoveZombi>().InvokeMovimientoZombi();
+            if (zombiAt.GetComponent<MoveZombi>().estaMuerto())
+            {
+                for (int j = i; j < listaZombis.Count; j++)
+                {
+
+                    if (i == j)
+                    {
+                        GameObject zombiDestruido = listaZombis[j];
+
+                        listaZombis.Remove(zombiDestruido);
+                        num_zombis--;
+                        Destroy(zombiDestruido);
+                    }
+
+                    else
+                        listaZombis[i].name = "Zombi_" + (j + 1);
+                }
+            }
         }
     }
 
