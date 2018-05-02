@@ -178,7 +178,8 @@ public class MoveHeroe : MonoBehaviour {
 			}
 
 			_posicion = new Vector2 (-this.gameObject.transform.position.y, this.gameObject.transform.position.x);
-			Debug.Log (_posicion);
+			if (this.gameObject.transform.position == GameManager.instance.refugio.transform.position)
+				GameManager.instance.finPartida = true;
 			GameManager.instance.tablero [(int)_posicion.x, (int)_posicion.y].hayHeroe = true;
 		}
 

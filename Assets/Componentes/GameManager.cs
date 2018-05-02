@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
 
     public int puntuacion = 0;  // +1 por zombi muerto (ó +5 si lo mató el héroe)
                                 // ○ -10 por aliado muerto (ó -50 si muere el héroe)
-    bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
+    public bool finPartida = false;    // La partida termina al morir el héroe, o al entrar este en el refugio
 
     public PersonajeCasilla[,] tablero = new PersonajeCasilla[5,10];
 
@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour {
     Vector2Int posRefugio;
 
     public bool deDia = true;
-
 	// Use this for initialization
 	void Start () {
         ButtonComenzar.SetActive(false);
@@ -152,6 +151,8 @@ public class GameManager : MonoBehaviour {
 
 		turnoHeroe ();
         TurnoZombis();
+		if (finPartida)
+			ButtonComenzar.SetActive (false);
     }
 
     public void OnButtonReiniciarClick() {
