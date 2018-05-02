@@ -84,7 +84,6 @@ public class GameManager : MonoBehaviour {
             {
                 for (int j = i; j < listaZombis.Count; j++)
                 {
-
                     if (i == j)
                     {
                         GameObject zombiDestruido = listaZombis[j];

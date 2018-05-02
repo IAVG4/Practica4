@@ -114,8 +114,6 @@ public class MoveZombi : MonoBehaviour
                     {
 
                         if (GameManager.instance.getNumAliados() >= 2 && num < 90) muerto = true;
-
-
                         else if (GameManager.instance.getNumAliados() == 1 && num < 50) muerto = true;
                         else if (GameManager.instance.getNumAliados() == 0 && num < 20) muerto = true;
                         else
@@ -159,7 +157,25 @@ public class MoveZombi : MonoBehaviour
 
             else
             {
-                this.gameObject.transform.Translate(new Vector3(0, 0, 0));
+                if (Mathf.Abs(this.gameObject.transform.position.x - AliadoMasCercano.x) > 
+                    Mathf.Abs(-this.gameObject.transform.position.y - (-AliadoMasCercano.y)))
+                {
+                    if (this.gameObject.transform.position.y < AliadoMasCercano.y)
+                    {
+                        this.gameObject.transform.Translate(new Vector3(0, 1, 0));
+                    }
+                    else this.gameObject.transform.Translate(new Vector3(0, -1, 0));
+                }
+
+                else
+                {
+                    if (this.gameObject.transform.position.x < AliadoMasCercano.x)
+                    {
+                        this.gameObject.transform.Translate(new Vector3(1, 0, 0));
+                    }
+                    else this.gameObject.transform.Translate(new Vector3(-1, 0, 0));
+                }
+                
             }
         }
 
